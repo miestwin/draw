@@ -6,3 +6,4 @@
 - menu with colors, trash, clear
 - save in mysql
 - unique url
+- docker
