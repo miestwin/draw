@@ -84,11 +84,15 @@ canvas[resize] {
     align-items: center;
 }
 
-.c-menu .c-menu__item {
+.c-menu__item {
     color: #ffffff;
     margin-bottom: 5px;
 }
 
-.c-menu .c-menu__item:last-child {
+.c-menu__item:last-child {
     margin-bottom: 0;
+}
+
+.c-menu__item--indicator {
+    font-size: 1.5rem;
 }
