@@ -23,6 +23,12 @@ const Draw = (function(window, document, Hammer, paper) {
     let penWidth = penWidthDefault;
 
     /**
+     * Erase pen
+     */
+    const backgroundColor = '#000000';
+    const eraseWidth = 50;
+
+    /**
      * Setup paper
      */
     const canvas = document.getElementById('draw');
@@ -86,6 +92,35 @@ const Draw = (function(window, document, Hammer, paper) {
         path.simplify(8);
     }
 
+    /**
+     * Start erase
+     * @param {*} event 
+     */
+    function startErase(event) {
+        lastActionName = 'erase';
+        path = new paper.Path({
+            segments: [{ x: event.center.x, y: event.center.y }],
+            strokeColor: backgroundColor,
+            strokeWidth: eraseWidth,
+            strokeCap: 'round',
+            fullySelected: false
+        });
+    }
+
+    /**
+     * Erase on canvas
+     * @param {*} Event 
+     */
+    function erase(event) {
+        path.add({ x: event.center.x, y: event.center.y });
+    }
+
+    /**
+     * End erase
+     * @param {*} event 
+     */
+    function endErase(event) {}
+
     const mc = new Hammer.Manager(canvas);
 
     const pan = new Hammer.Pan({ pointers: 3 });
@@ -113,7 +148,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 startDraw(event);
                 break;
             case 2:
-                // start erase
+                startErase(event);
                 break;
             case 3:
                 // start drag
@@ -127,7 +162,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 draw(event);
                 break;
             case 'erase':
-                // handle erase
+                erase(event);
                 break;
             case 'drag':
                 // handle drag
@@ -141,7 +176,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 endDraw(event);
                 break;
             case 'erase':
-                // handle erase end
+                endErase(event);
                 break;
             case 'drag':
                 // handle drag end
