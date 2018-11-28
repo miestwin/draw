@@ -20,12 +20,12 @@
         <button type="button" class="c-menu__item c-btn bg-transparent" onclick="Draw.increasePen()">
             <i class="fas fa-plus"></i>
         </button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-red"></button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-green"></button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-blue"></button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-white"></button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-yellow"></button>
-        <button type="button" class="c-menu__item c-btn h-dot bg-orange"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-red" data-color="#ff0000" onclick="Draw.pickColor(this)"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-green" data-color="#00ff00" onclick="Draw.pickColor(this)"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-blue" data-color="#0000ff" onclick="Draw.pickColor(this)"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-white" data-color="#ffffff" onclick="Draw.pickColor(this)"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-yellow" data-color="#ffff00" onclick="Draw.pickColor(this)"></button>
+        <button type="button" class="c-menu__item c-btn h-dot bg-orange" data-color="#ffa500" onclick="Draw.pickColor(this)"></button>
         <button type="button" class="c-menu__item c-btn bg-transparent" onclick="Draw.resetPen()">
             <i class="fas fa-undo-alt"></i>
         </button>

@@ -1,4 +1,3 @@
-
 const Draw = (function(window, document, Hammer, paper) {
     /**
      * Prevent showing context menu (right mouse click)
@@ -19,8 +18,8 @@ const Draw = (function(window, document, Hammer, paper) {
      * Pen width
      */
     const MIN_PEN_WIDTH = 2;
-    const MAX_PEN_WIDTH = 14;
-    const penWidthDefault = 2;
+    const MAX_PEN_WIDTH = 20;
+    const penWidthDefault = MIN_PEN_WIDTH;
     let penWidth = penWidthDefault;
 
     /**
@@ -76,6 +75,14 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     function clearScene() {
         paper.project.activeLayer.removeChildren();
+    }
+
+    /**
+     * Set pen color
+     * @param {*} element 
+     */
+    function pickColor(element) {
+        penColor = element.dataset.color;
     }
 
     /**
@@ -232,6 +239,7 @@ const Draw = (function(window, document, Hammer, paper) {
         increasePen,
         decreasePen,
         clearScene,
-        resetPen
+        resetPen,
+        pickColor
     }
 })(window, document, Hammer, paper);
