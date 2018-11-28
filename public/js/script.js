@@ -56,10 +56,26 @@ const Draw = (function(window, document, Hammer, paper) {
     }
 
     /**
+     * Reset pen
+     */
+    function resetPen() {
+        penColor = penColorDefault;
+        penWidth = penWidthDefault;
+        updateIndicator();
+    }
+
+    /**
      * Update text with pen width
      */
     function updateIndicator() {
         document.querySelector('.c-menu__item--indicator').textContent = penWidth;
+    }
+
+    /**
+     * Clear canvas
+     */
+    function clearScene() {
+        paper.project.activeLayer.removeChildren();
     }
 
     /**
@@ -215,5 +231,7 @@ const Draw = (function(window, document, Hammer, paper) {
     return {
         increasePen,
         decreasePen,
+        clearScene,
+        resetPen
     }
 })(window, document, Hammer, paper);
