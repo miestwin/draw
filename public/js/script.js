@@ -7,6 +7,7 @@ const Draw = (function(window, document, Hammer, paper) {
     let path;
     let lastActionName;
     let lastEvent;
+    let lastPointersNumber;
 
     /**
      * Pen color
@@ -194,6 +195,7 @@ const Draw = (function(window, document, Hammer, paper) {
     });
 
     function handleFirstEvent(event) {
+        lastPointersNumber = event.maxPointers;
         switch (event.maxPointers) {
             case 1:
                 startDraw(event);
@@ -208,6 +210,11 @@ const Draw = (function(window, document, Hammer, paper) {
     }
 
     function handleEvent(event) {
+        if (lastPointersNumber !== event.maxPointers) {
+            handleFinalEvent(event);
+            handleFirstEvent(event);
+        }
+
         switch (lastActionName) {
             case 'draw':
                 draw(event);
