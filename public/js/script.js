@@ -174,7 +174,7 @@ const Draw = (function(window, document, Hammer, paper) {
 
     const mc = new Hammer.Manager(canvas);
 
-    const pan = new Hammer.Pan({ pointers: 3 });
+    const pan = new Hammer.Pan({ pointers: 1 });
     mc.add(pan);
 
     mc.on('hammer.input', function (event) {

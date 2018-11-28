@@ -1,15 +1,16 @@
 # Drawing
 
 ### TODO
-- drawing on canvas
 - download image
-- menu with colors, trash, clear
 - save in mysql
 - socket
 - unique url
 - docker
 - responsive
 - canvas resize
+- undo, redo menu
+- swipe menu
+- history
 
 - 1 finger draw (mouse)
 - 2 fingers erase (mouse + shift)
