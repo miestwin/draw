@@ -7,6 +7,7 @@ const Draw = (function(window, document, Hammer, paper) {
 
     let path;
     let lastActionName;
+    let lastEvent;
 
     /**
      * Pen color
@@ -121,6 +122,33 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     function endErase(event) {}
 
+    /**
+     * Start draging
+     * @param {*} event 
+     */
+    function startDrag(event) {
+        lastActionName = 'drag';
+        lastEvent = event;
+    }
+
+    /**
+     * Handle drag event
+     * @param {*} event
+     */
+    function drag(event) {
+        const x = event.center.x - lastEvent.center.x;
+        const y = event.center.y - lastEvent.center.y;
+        paper.project.activeLayer.position.x = paper.project.activeLayer.position.x + x;
+        paper.project.activeLayer.position.y = paper.project.activeLayer.position.y + y;
+        lastEvent = event;
+    }
+
+    /**
+     * Stop draging
+     * @param {*} event 
+     */
+    function endDrag(event) {}
+
     const mc = new Hammer.Manager(canvas);
 
     const pan = new Hammer.Pan({ pointers: 3 });
@@ -151,7 +179,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 startErase(event);
                 break;
             case 3:
-                // start drag
+                startDrag(event);
                 break;
         }
     }
@@ -165,7 +193,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 erase(event);
                 break;
             case 'drag':
-                // handle drag
+                drag(event);
                 break;
         }
     }
@@ -179,7 +207,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 endErase(event);
                 break;
             case 'drag':
-                // handle drag end
+                endDrag(event);
                 break;
         }
     }
