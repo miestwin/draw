@@ -34,6 +34,13 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     const canvas = document.getElementById('draw');
     paper.setup(canvas);
+    const canvasBackground = new paper.Path.Rectangle({
+        point: [0, 0],
+        size: [paper.view.size.width, paper.view.size.height],
+        strokeColor: '#000000',
+        fillColor: '#000000',
+        selected: false
+    });
 
     /**
      * Increase pen width
@@ -68,7 +75,7 @@ const Draw = (function(window, document, Hammer, paper) {
      * Update text with pen width
      */
     function updateIndicator() {
-        document.querySelector('.c-menu__item--indicator').textContent = penWidth;
+        document.getElementsByClassName('c-menu__item--indicator').textContent = penWidth;
     }
 
     /**
@@ -84,6 +91,14 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     function pickColor(element) {
         penColor = element.dataset.color;
+    }
+
+    /**
+     * Refresh download link to image
+     */
+    function refreshDownload() {
+        const img = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+        document.getElementById('download').setAttribute('href', img);
     }
 
     /**
@@ -115,6 +130,7 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     function endDraw(event) {
         path.simplify(8);
+        setTimeout(() => refreshDownload(), 1);
     }
 
     /**
@@ -213,6 +229,7 @@ const Draw = (function(window, document, Hammer, paper) {
         if (lastPointersNumber !== event.maxPointers) {
             handleFinalEvent(event);
             handleFirstEvent(event);
+            return;
         }
 
         switch (lastActionName) {
@@ -247,6 +264,6 @@ const Draw = (function(window, document, Hammer, paper) {
         decreasePen,
         clearScene,
         resetPen,
-        pickColor
+        pickColor,
     }
 })(window, document, Hammer, paper);
