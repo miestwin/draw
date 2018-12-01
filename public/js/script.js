@@ -101,6 +101,27 @@ const Draw = (function(window, document, Hammer, paper) {
         document.getElementById('download').setAttribute('href', img);
     }
 
+    const menuDetector = new Hammer.Manager(document.querySelector('.c-menu__detector'));
+    const menuToolbarDetector = new Hammer.Manager(document.querySelector('.c-menu__toolbar'));
+    const swipe = new Hammer.Swipe();
+    menuDetector.add(swipe);
+    menuToolbarDetector.add(swipe);
+
+    menuDetector.on('swipeup', function(event) {
+        const toolbar = document.querySelector('.c-menu__toolbar');
+        toolbar.classList.add('c-menu__toolbar--visible');
+    });
+
+    menuToolbarDetector.on('swipeup', function(event) {
+        const toolbar = document.querySelector('.c-menu__toolbar');
+        toolbar.classList.add('c-menu__toolbar--visible');
+    });
+
+    menuToolbarDetector.on('swipedown', function(event) {
+        const toolbar = document.querySelector('.c-menu__toolbar');
+        toolbar.classList.remove('c-menu__toolbar--visible');
+    });
+
     /**
      * Start drawing on canvas
      * @param {*} event 
