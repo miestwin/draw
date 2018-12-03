@@ -250,7 +250,7 @@ const Draw = (function(window, document, Hammer, paper) {
 
     mc.on('hammer.input', function (event) {
         if (event.srcEvent.ctrlKey) {
-            event.maxPointers = 3;
+            event.maxPointers = 5;
         } else if (event.srcEvent.shiftKey) {
             event.maxPointers = 2;
         }
@@ -275,7 +275,7 @@ const Draw = (function(window, document, Hammer, paper) {
                 hiddenPaths = [];
                 startErase(event);
                 break;
-            case 3:
+            case 5:
                 startDrag(event);
                 break;
         }
