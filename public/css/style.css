@@ -63,6 +63,26 @@ canvas[resize] {
     border-radius: 50%;
 }
 
+.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+}
+
 .c-btn {
     border: none;
     outline: none;
@@ -78,41 +98,52 @@ canvas[resize] {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 60%;
-    margin: 0 auto;
+}
+
+.c-menu__undo,
+.c-menu__redo {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-color: transparent;
 }
 
 .c-menu__detector {
-    width: 100%;
+    width: 60%;
     height: 50px;
+    margin: 0 auto;
 }
 
-.c-menu__toolbar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-bottom: 10px;
+.c-toolbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: translateY(50px);
-    transition: 70ms ease-in-out;
 }
 
-.c-menu__toolbar--visible {
-    transform: translate(0);
-}
-
-.c-menu__item {
+.c-toolbar__item {
     color: #ffffff;
     margin-right: 7px;
 }
 
-.c-menu__item:last-child {
+.c-toolbar__item:last-child {
     margin-right: 0;
 }
 
-.c-menu__item--indicator {
+.c-toolbar__item--indicator {
     font-size: 1.5rem;
+}
+
+.c-menu__c-toolbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 60%;
+    margin: 0 auto 10px auto;
+    transform: translateY(50px);
+    transition: 70ms ease-in-out;
+}
+
+.c-menu__c-toolbar--visible {
+    transform: translate(0);
 }

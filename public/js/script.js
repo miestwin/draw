@@ -8,6 +8,7 @@ const Draw = (function(window, document, Hammer, paper) {
     let lastActionName;
     let lastEvent;
     let lastPointersNumber;
+    let hiddenPaths = [];
 
     /**
      * Pen color
@@ -75,7 +76,7 @@ const Draw = (function(window, document, Hammer, paper) {
      * Update text with pen width
      */
     function updateIndicator() {
-        document.getElementsByClassName('c-menu__item--indicator').textContent = penWidth;
+        document.querySelector('.c-menu__c-toolbar .c-toolbar__item--indicator').textContent = penWidth;
     }
 
     /**
@@ -101,25 +102,57 @@ const Draw = (function(window, document, Hammer, paper) {
         document.getElementById('download').setAttribute('href', img);
     }
 
+    window.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'z') {
+            undo();
+        } else if (event.ctrlKey && event.key === 'y') {
+            redo();
+        }
+    });
+
+    /**
+     * Undo changes
+     */
+    function undo() {
+        if (paper.project.activeLayer.children.length < 1) {
+            return;
+        }
+        const children = paper.project.activeLayer.children.pop();
+        children.visible = false;
+        hiddenPaths.push(children);
+    }
+
+    /**
+     * Redo changes
+     */
+    function redo() {
+        if (hiddenPaths.length < 1) {
+            return;
+        }
+        const children = hiddenPaths.pop();
+        children.visible = true;
+        paper.project.activeLayer.children.push(children);
+    }
+
     const menuDetector = new Hammer.Manager(document.querySelector('.c-menu__detector'));
-    const menuToolbarDetector = new Hammer.Manager(document.querySelector('.c-menu__toolbar'));
+    const menuToolbarDetector = new Hammer.Manager(document.querySelector('.c-menu__c-toolbar'));
     const swipe = new Hammer.Swipe();
     menuDetector.add(swipe);
     menuToolbarDetector.add(swipe);
 
     menuDetector.on('swipeup', function(event) {
-        const toolbar = document.querySelector('.c-menu__toolbar');
-        toolbar.classList.add('c-menu__toolbar--visible');
+        const toolbar = document.querySelector('.c-menu__c-toolbar');
+        toolbar.classList.add('c-menu__c-toolbar--visible');
     });
 
     menuToolbarDetector.on('swipeup', function(event) {
-        const toolbar = document.querySelector('.c-menu__toolbar');
-        toolbar.classList.add('c-menu__toolbar--visible');
+        const toolbar = document.querySelector('.c-menu__c-toolbar');
+        toolbar.classList.add('c-menu__c-toolbar--visible');
     });
 
     menuToolbarDetector.on('swipedown', function(event) {
-        const toolbar = document.querySelector('.c-menu__toolbar');
-        toolbar.classList.remove('c-menu__toolbar--visible');
+        const toolbar = document.querySelector('.c-menu__c-toolbar');
+        toolbar.classList.remove('c-menu__c-toolbar--visible');
     });
 
     /**
@@ -235,9 +268,11 @@ const Draw = (function(window, document, Hammer, paper) {
         lastPointersNumber = event.maxPointers;
         switch (event.maxPointers) {
             case 1:
+                hiddenPaths = [];
                 startDraw(event);
                 break;
             case 2:
+                hiddenPaths = [];
                 startErase(event);
                 break;
             case 3:
@@ -286,5 +321,7 @@ const Draw = (function(window, document, Hammer, paper) {
         clearScene,
         resetPen,
         pickColor,
+        undo,
+        redo
     }
 })(window, document, Hammer, paper);
