@@ -4,6 +4,8 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     document.addEventListener('contextmenu', event => event.preventDefault());
 
+    const socket = io();
+
     let path;
     let lastActionName;
     let lastEvent;
