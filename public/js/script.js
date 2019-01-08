@@ -4,7 +4,7 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     document.addEventListener('contextmenu', event => event.preventDefault());
 
-    const socket = io();
+    const socket = io({ transports: ['websocket'], query: { room: window.location.pathname }});
 
     let path;
     let lastActionName;

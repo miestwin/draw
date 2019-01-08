@@ -6,10 +6,10 @@
     <title>Draw</title>
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="lib/hammer.js"></script>
-    <script src="lib/paper-full.js"></script>
-    <script src="lib/socket.io.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/lib/hammer.js"></script>
+    <script src="/lib/paper-full.js"></script>
+    <script src="/lib/socket.io.js"></script>
 </head>
 <body>
     <canvas id="draw" class="c-canvas" resize></canvas>
@@ -23,14 +23,32 @@
             <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.increasePen()">
                 <i class="fas fa-plus"></i>
             </button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-red" data-color="#ff0000" onclick="Draw.pickColor(this)"></button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-green" data-color="#00ff00" onclick="Draw.pickColor(this)"></button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-blue" data-color="#0000ff" onclick="Draw.pickColor(this)"></button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-white" data-color="#ffffff" onclick="Draw.pickColor(this)"></button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-yellow" data-color="#ffff00" onclick="Draw.pickColor(this)"></button>
-            <button type="button" class="c-toolbar__item c-btn h-dot bg-orange" data-color="#ffa500" onclick="Draw.pickColor(this)"></button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#ff0000" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-red"></span>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#00ff00" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-green"></span>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#0000ff" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-blue"></span>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#ffffff" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-white"></span>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#ffff00" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-yellow"></span>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn" data-color="#ffa500" onclick="Draw.pickColor(this)">
+                <span class="h-dot bg-orange"></span>
+            </button>
             <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.resetPen()">
+                <i class="fas fa-eraser"></i>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.undo()">
                 <i class="fas fa-undo-alt"></i>
+            </button>
+            <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.redo()">
+                <i class="fas fa-redo-alt"></i>
             </button>
             <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.clearScene()">
                 <i class="fas fa-trash-alt"></i>
@@ -39,8 +57,6 @@
                 <i class="fas fa-download"></i>
             </a>
         </div>
-        <button class="c-menu__undo c-btn bottom-left" onclick="Draw.undo()"></button>
-        <button class="c-menu__redo c-btn bottom-right" onclick="Draw.redo()"></button>
     </aside>
     <script src="js/script.js"></script>
 </body>

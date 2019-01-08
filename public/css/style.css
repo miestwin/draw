@@ -58,6 +58,7 @@ canvas[resize] {
 }
 
 .h-dot {
+    display: inline-block;
     width: 25px !important;
     height: 25px !important;
     border-radius: 50%;
@@ -87,6 +88,7 @@ canvas[resize] {
     border: none;
     outline: none;
     cursor: pointer;
+    background-color: transparent;
 }
 
 .c-canvas {
@@ -100,14 +102,6 @@ canvas[resize] {
     bottom: 0;
 }
 
-.c-menu__undo,
-.c-menu__redo {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background-color: transparent;
-}
-
 .c-menu__detector {
     width: 60%;
     height: 70px;
@@ -118,11 +112,17 @@ canvas[resize] {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: auto;
 }
 
 .c-toolbar__item {
     color: #ffffff;
-    margin-right: 7px;
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .c-toolbar__item:last-child {
@@ -133,14 +133,18 @@ canvas[resize] {
     font-size: 1.5rem;
 }
 
+.c-toolbar__item.c-btn:hover {
+    background-color: #383333;
+}
+
 .c-menu__c-toolbar {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 60%;
-    margin: 0 auto 10px auto;
-    transform: translateY(50px);
+    width: 100%;
+    background-color: #2c2626;
+    transform: translateY(100px);
     transition: 70ms ease-in-out;
 }
 
