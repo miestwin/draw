@@ -78,7 +78,7 @@ const Draw = (function(window, document, Hammer, paper) {
      * Update text with pen width
      */
     function updateIndicator() {
-        document.querySelector('.c-menu__c-toolbar .c-toolbar__item--indicator').textContent = penWidth;
+        document.getElementById('toolbar-indicator').textContent = penWidth;
     }
 
     /**
