@@ -18,44 +18,44 @@
         <div class="c-menu__c-toolbar">
             <div class="overflow-container">
                 <div class="c-toolbar">
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.decreasePen()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Decrease pen" onclick="Draw.decreasePen()">
                         <i class="fas fa-minus"></i>
                     </button>
                     <span id="toolbar-indicator" class="c-toolbar__item c-toolbar__item--indicator">2</span>
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.increasePen()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Increase pen" onclick="Draw.increasePen()">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#ff0000" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#ff0000" title="Pick red" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-red"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#00ff00" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#00ff00" title="Pick green" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-green"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#0000ff" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#0000ff" title="Pick blue" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-blue"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffffff" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffffff" title="Pick white" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-white"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffff00" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffff00" title="Pick yellow" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-yellow"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffa500" onclick="Draw.pickColor(this)">
+                    <button type="button" class="c-toolbar__item c-btn" data-color="#ffa500" title="Pick orange" onclick="Draw.pickColor(this)">
                         <span class="h-dot bg-orange"></span>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.resetPen()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Reset pen" onclick="Draw.resetPen()">
                         <i class="fas fa-eraser"></i>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.undo()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Undo" onclick="Draw.undo()">
                         <i class="fas fa-undo-alt"></i>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.redo()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Redo" onclick="Draw.redo()">
                         <i class="fas fa-redo-alt"></i>
                     </button>
-                    <button type="button" class="c-toolbar__item c-btn bg-transparent" onclick="Draw.clearScene()">
+                    <button type="button" class="c-toolbar__item c-btn bg-transparent" title="Clear screen" onclick="Draw.clearScene()">
                         <i class="fas fa-trash-alt"></i>
                     </button>
-                    <a id="download" class="c-toolbar__item c-btn" href="#" download="draw.png">
+                    <a id="download" class="c-toolbar__item c-btn" title="Download" href="#" download="draw.png">
                         <i class="fas fa-download"></i>
                     </a>
                 </div>
