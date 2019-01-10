@@ -78,7 +78,9 @@ const Draw = (function(window, document, Hammer, paper) {
      * Update text with pen width
      */
     function updateIndicator() {
-        document.getElementById('toolbar-indicator').textContent = penWidth;
+        const indicator = document.getElementById('toolbar-indicator');
+        indicator.textContent = penWidth;
+        indicator.style.color = penColor;
     }
 
     /**
@@ -94,6 +96,7 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     function pickColor(element) {
         penColor = element.dataset.color;
+        updateIndicator();
     }
 
     /**
