@@ -10,6 +10,11 @@ const io = require('socket.io')(http);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// const { CLient } = require('pg');
+// const client = new CLient();
+
+// await client.conect();
+
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
