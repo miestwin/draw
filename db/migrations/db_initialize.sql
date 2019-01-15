@@ -1,0 +1,18 @@
+DROP DATABASE IF EXISTS draw;
+CREATE DATABASE draw;
+USE draw;
+
+DROP TABLE IF EXISTS boards;
+CREATE TABLE boards (
+    name VARCHAR(240) NOT NULL,
+    owner VARCHAR(240) NOT NULL,
+    changed_date DATE NOT NULL
+);
+
+DROP TABLE IF EXISTS paths;
+CREATE TABLE paths (
+    board VARCHAR(240) NOT NULL,
+    idx INT NOT NULL,
+    id SERIAL PRIMARY KEY,
+    json_string TEXT NOT NULL,
+);

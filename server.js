@@ -10,10 +10,15 @@ const io = require('socket.io')(http);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// const { CLient } = require('pg');
-// const client = new CLient();
+const { Pool } = require('pg');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+});
 
-// await client.conect();
+pool.on('error', (err, client) => {
+    console.log('Unexpected error on idle client', err);
+});
 
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
