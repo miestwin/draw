@@ -4,15 +4,15 @@ USE draw;
 
 DROP TABLE IF EXISTS boards;
 CREATE TABLE boards (
-    name VARCHAR(240) NOT NULL,
+    name VARCHAR(240) PRIMARY KEY,
     owner VARCHAR(240) NOT NULL,
     changed_date DATE NOT NULL
 );
 
 DROP TABLE IF EXISTS paths;
 CREATE TABLE paths (
-    board VARCHAR(240) NOT NULL,
-    idx INT NOT NULL,
     id SERIAL PRIMARY KEY,
+    board VARCHAR(240) REFERENCES boards(name) ON DELETE CASCADE,
+    idx INT NOT NULL,
     json_string TEXT NOT NULL,
 );
