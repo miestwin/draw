@@ -1,18 +1,14 @@
-DROP DATABASE IF EXISTS draw;
-CREATE DATABASE draw;
-USE draw;
-
-DROP TABLE IF EXISTS boards;
+DROP TABLE IF EXISTS boards CASCADE;
 CREATE TABLE boards (
     name VARCHAR(240) PRIMARY KEY,
     owner VARCHAR(240) NOT NULL,
     changed_date DATE NOT NULL
 );
 
-DROP TABLE IF EXISTS paths;
+DROP TABLE IF EXISTS paths CASCADE;
 CREATE TABLE paths (
     id SERIAL PRIMARY KEY,
     board VARCHAR(240) REFERENCES boards(name) ON DELETE CASCADE,
     idx INT NOT NULL,
-    json_string TEXT NOT NULL,
+    json_string TEXT NOT NULL
 );
