@@ -7,10 +7,13 @@ const Draw = (function(window, document, Hammer, paper) {
     const socket = io({ transports: ['websocket'], query: { room: window.location.pathname }});
 
     let path;
+    let lastPathIndex;
     let lastActionName;
     let lastEvent;
     let lastPointersNumber;
     let hiddenPaths = [];
+
+    const layerIndex = 0;
 
     /**
      * Pen color
@@ -173,6 +176,7 @@ const Draw = (function(window, document, Hammer, paper) {
             strokeCap: 'round',
             fullySelected: false
         });
+        
     }
 
     /**
@@ -180,7 +184,12 @@ const Draw = (function(window, document, Hammer, paper) {
      * @param {*} event 
      */
     function draw(event) {
-        path.add({ x: event.center.x, y: event.center.y });
+        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        if (lastPath === undefined) {
+            console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
+        }
+        lastPath.add({ x: event.center.x, y: event.center.y });
+        socket.emit('draw', lastPathIndex, [event.center.x, event.center.y]);
     }
 
     /**
@@ -190,6 +199,8 @@ const Draw = (function(window, document, Hammer, paper) {
     function endDraw(event) {
         path.simplify(8);
         setTimeout(() => refreshDownload(), 1);
+        console.log(path);
+        console.log(paper);
     }
 
     /**
