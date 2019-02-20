@@ -32,11 +32,7 @@ app.get('*', function(req, res) {
 //     console.log(res.rows);
 // });
 
-io.on('connection', function(socket) {
-    console.log(`DEBUG: user ${socket.id} connected`);
-    console.log('DEBUG: room', socket.handshake.query.room);
-
-    // pool.connect((err, client, done) => {
+// pool.connect((err, client, done) => {
     //     if (err) {
     //         throw err;
     //     }
@@ -52,16 +48,18 @@ io.on('connection', function(socket) {
     //     });
     // });
 
+io.on('connection', (socket) => {
+    console.log(`DEBUG: user ${socket.id} connected ${socket.handshake.query.room}`);
+
+    // get board name
     const regex = /\/[a-zA-Z0-9]+/;
     const result = socket.handshake.query.room.match(regex);
-    console.log('DEBUG: RESULT', result);
     if (result == null) {
         return;
     }
-
     const board = result[0];
 
-    socket.join(board, function() {
+    socket.join(board, () => {
         console.log('DEBUG: JOIN TO ROOM', board);
 
         pool.connect((err, client, done) => {
@@ -71,37 +69,33 @@ io.on('connection', function(socket) {
 
             // get board from database
             // if not exist insert board
-            // else take paths and emit to user
+            // else emit paths to user
 
-            client.query('SELECT * FROM boards LEFT JOIN paths on boards.name = paths.board WHERE boards.name = $1', [board], function(err, result) {
+            client.query('SELECT * FROM boards LEFT JOIN paths on boards.name = paths.board WHERE boards.name = $1',[board], (err, result) => {
                 if (err) {
                     done();
                     throw err;
                 }
 
-                console.log('DEBUG: ROWS', result.rows);
-
                 if (result.rows.length === 0) {
                     // insert board
-                    client.query('INSERT INTO boards (name, owner, changed_date) VALUES ($1, $2, $3)', [board, socket.id, new Date()], function(err, result) {
+                    client.query('INSERT INTO boards (name, owner, changed_date) VALUES ($1, $2, $3)', [board, socket.id, new Date()], (err, result) => {
                         if (err) {
                             done();
                             throw err;
                         }
-
                         done();
                     });
                 } else {
                     // emit data to client
-                    socket.emit('board-init', result.rows);
-                    console.log('DEBUG: EMIT DATA');
+                    socket.emit('init-board', result.rows);
                     done();
                 }
             });
         });
     });
 
-    socket.on('start-draw', function(path, callback) {
+    socket.on('start-draw', (path, callback) => {
         path = JSON.parse(path);
 
         pool.connect((err, client, done) => {
@@ -129,7 +123,7 @@ io.on('connection', function(socket) {
                     return;
                 }
 
-                client.query('SELECT MAX(idx) AS idx FROM paths where board = $1', ['board'], function(err, res) {
+                client.query('SELECT MAX(idx) AS idx FROM paths where board = $1', ['board'], (err, res) => {
                     if (shouldAbort(err)) {
                         return;
                     }
@@ -140,16 +134,28 @@ io.on('connection', function(socket) {
         });
     });
 
-    socket.on('draw', function(index, point) {
-        console.log('DRAW', index, point);
+    socket.on('update-draw', (index, point)  => {
+        socket.to(board).emit('draw', index, point);
     });
 
-    socket.on('disconnect', function() {
+    socket.on('end-draw', (index, path) => {
+        // end draw
+    });
+
+    socket.on('undo', (index) => {
+        // undo
+    });
+
+    socket.on('redo', (index) => {
+        socket.to(board).emit('redo', index);
+    });
+
+    socket.on('disconnect', () => {
         console.log(`user ${socket.id} disconnected`);
     });
 });
 
-http.listen(PORT, function() {
+http.listen(PORT, () => {
     console.log('Listening on *:' + PORT);
 });
 

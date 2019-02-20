@@ -6,6 +6,33 @@ const Draw = (function(window, document, Hammer, paper) {
 
     const socket = io({ transports: ['websocket'], query: { room: window.location.pathname }});
 
+    socket.on('init-board', function(data) {
+        data.forEach((path, index) => {
+            paper.project.layers[layerIndex].insertChild(index, paper.importJSON(path['json_string']));
+        });
+    });
+
+    socket.on('start-draw', function() {
+
+    });
+
+    socket.on('update-draw', function() {
+
+    });
+
+    socket.on('end-draw', function() {
+
+    });
+
+    socket.on('undo', function(index) {
+        // undo();
+    });
+
+    socket.on('redo', function(index) {
+        // redo();
+        // check from where action start
+    });
+
     let path;
     let lastPathIndex;
     let lastActionName;
@@ -189,7 +216,7 @@ const Draw = (function(window, document, Hammer, paper) {
             console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
         }
         lastPath.add({ x: event.center.x, y: event.center.y });
-        socket.emit('draw', lastPathIndex, [event.center.x, event.center.y]);
+        socket.emit('update-draw', lastPathIndex, [event.center.x, event.center.y]);
     }
 
     /**
