@@ -33,8 +33,8 @@ app.get('*', function(req, res) {
 // });
 
 io.on('connection', function(socket) {
-    console.log(`user ${socket.id} connected`);
-    console.log('room', socket.handshake.query.room);
+    console.log(`DEBUG: user ${socket.id} connected`);
+    console.log('DEBUG: room', socket.handshake.query.room);
 
     // pool.connect((err, client, done) => {
     //     if (err) {
@@ -51,6 +51,55 @@ io.on('connection', function(socket) {
     //         }
     //     });
     // });
+
+    const regex = /\/[a-zA-Z0-9]+/;
+    const result = socket.handshake.query.room.match(regex);
+    console.log('DEBUG: RESULT', result);
+    if (result == null) {
+        return;
+    }
+
+    const board = result[0];
+
+    socket.join(board, function() {
+        console.log('DEBUG: JOIN TO ROOM', board);
+
+        pool.connect((err, client, done) => {
+            if (err) {
+                throw err;
+            }
+
+            // get board from database
+            // if not exist insert board
+            // else take paths and emit to user
+
+            client.query('SELECT * FROM boards LEFT JOIN paths on boards.name = paths.board WHERE boards.name = $1', [board], function(err, result) {
+                if (err) {
+                    done();
+                    throw err;
+                }
+
+                console.log('DEBUG: ROWS', result.rows);
+
+                if (result.rows.length === 0) {
+                    // insert board
+                    client.query('INSERT INTO boards (name, owner, changed_date) VALUES ($1, $2, $3)', [board, socket.id, new Date()], function(err, result) {
+                        if (err) {
+                            done();
+                            throw err;
+                        }
+
+                        done();
+                    });
+                } else {
+                    // emit data to client
+                    socket.emit('board-init', result.rows);
+                    console.log('DEBUG: EMIT DATA');
+                    done();
+                }
+            });
+        });
+    });
 
     socket.on('start-draw', function(path, callback) {
         path = JSON.parse(path);
