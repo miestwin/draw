@@ -4,35 +4,6 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     document.addEventListener('contextmenu', event => event.preventDefault());
 
-    const socket = io({ transports: ['websocket'], query: { room: window.location.pathname }});
-
-    socket.on('init-board', function(data) {
-        data.forEach((path, index) => {
-            paper.project.layers[layerIndex].insertChild(index, paper.importJSON(path['json_string']));
-        });
-    });
-
-    socket.on('start-draw', function() {
-
-    });
-
-    socket.on('update-draw', function() {
-
-    });
-
-    socket.on('end-draw', function() {
-
-    });
-
-    socket.on('undo', function(index) {
-        // undo();
-    });
-
-    socket.on('redo', function(index) {
-        // redo();
-        // check from where action start
-    });
-
     let path;
     let lastPathIndex;
     let lastActionName;
@@ -40,7 +11,8 @@ const Draw = (function(window, document, Hammer, paper) {
     let lastPointersNumber;
     let hiddenPaths = [];
 
-    const layerIndex = 0;
+    // const layerIndex = 0;
+    // const layerName = 'drawLayer';
 
     /**
      * Pen color
@@ -61,6 +33,42 @@ const Draw = (function(window, document, Hammer, paper) {
      */
     const backgroundColor = '#000000';
     const eraseWidth = 50;
+
+    const socketActive = window.location.pathname === '/' ? false : true;
+    const socket = io({ transports: ['websocket'], query: { room: window.location.pathname }});
+
+    socket.on('init-board', function(data) {
+        data.forEach((path, index) => {
+            paper.project.activeLayer.insertChild(index, paper.importJSON(path['json_string']));
+        });
+    });
+
+    socket.on('start-draw', function(index, path) {
+        console.log('STAT DRAW FROM SOCKET: ', index, path);
+        try {
+            paper.project.activeLayer.insertChild(index, paper.importJSON(path));
+        } catch (e) {
+            console.log('ERROR OCCURRED WHILE START DRAW: ', e);
+        }
+        paper.view.update();
+    });
+
+    socket.on('update-draw', function() {
+
+    });
+
+    socket.on('end-draw', function() {
+
+    });
+
+    socket.on('undo', function(index) {
+        // undo();
+    });
+
+    socket.on('redo', function(index) {
+        // redo();
+        // check from where action start
+    });
 
     /**
      * Setup paper
@@ -203,7 +211,19 @@ const Draw = (function(window, document, Hammer, paper) {
             strokeCap: 'round',
             fullySelected: false
         });
-        
+
+        if (socketActive) {
+            lastPathIndex = -1;
+            socket.emit('start-draw', path.exportJSON(), function(index) {
+                const item = paper.project.activeLayer.insertChild(index, path);
+                lastPathIndex = index;
+                console.log('START DRAW SCOKET: ', item);
+            });
+        } else {
+            const item = paper.project.activeLayer.addChild(path);
+            lastPathIndex = item.index;
+            console.log('START DRAW NON-SOCKET: ', item);
+        }
     }
 
     /**
@@ -211,12 +231,12 @@ const Draw = (function(window, document, Hammer, paper) {
      * @param {*} event 
      */
     function draw(event) {
-        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
-        if (lastPath === undefined) {
-            console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
-        }
-        lastPath.add({ x: event.center.x, y: event.center.y });
-        socket.emit('update-draw', lastPathIndex, [event.center.x, event.center.y]);
+        // const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        // if (lastPath === undefined) {
+        //     console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
+        // }
+        // lastPath.add({ x: event.center.x, y: event.center.y });
+        // socket.emit('update-draw', lastPathIndex, [event.center.x, event.center.y]);
     }
 
     /**

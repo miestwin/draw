@@ -128,7 +128,26 @@ io.on('connection', (socket) => {
                         return;
                     }
 
+                    let index = -1;
+                    if (res.rows.length > 0 && res.rows[0].idx != null) {
+                        index = res.rows[0].idx;
+                    }
 
+                    client.query('INSERT INTO paths (board, idx, json_string) VALUES ($1, $2, $3)', [board, index + 1, JSON.stringify(path)], (err, res) => {
+                        if (shouldAbort(err)) {
+                            return;
+                        }
+
+                        client.query('COMMIT', (err) => {
+                            if (err) {
+                                console.log('Error commiting transaction', err.stack);
+                            }
+
+                            callback(index + 1);
+                            socket.to(board).emit('start-draw', (index + 1), path);
+                            done();
+                        });
+                    })
                 });
             });
         });
