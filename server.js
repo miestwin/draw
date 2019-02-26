@@ -154,6 +154,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('update-draw', (index, point)  => {
+        console.log(`UPDATE PATH WITH INDEX ${index}, POINT ${point}`);
         socket.to(board).emit('draw', index, point);
     });
 

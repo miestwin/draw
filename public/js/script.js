@@ -1,4 +1,4 @@
-const Draw = (function(window, document, Hammer, paper) {
+const Draw = (function(window, document, Hammer, paper, io) {
     /**
      * Prevent showing context menu (right mouse click)
      */
@@ -53,8 +53,13 @@ const Draw = (function(window, document, Hammer, paper) {
         paper.view.update();
     });
 
-    socket.on('update-draw', function() {
-
+    socket.on('update-draw', function(index, point) {
+        const lastPath = paper.project.activeLayer.children[index];
+        if (lastPath === undefined) {
+            console.log(`ERROR with draw from socket. Path ${lastPathIndex} doesn't exist.`);
+        }
+        lastPath.add({ x: point[0], y: point[1] });
+        paper.view.update();
     });
 
     socket.on('end-draw', function() {
@@ -231,12 +236,15 @@ const Draw = (function(window, document, Hammer, paper) {
      * @param {*} event 
      */
     function draw(event) {
-        // const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
-        // if (lastPath === undefined) {
-        //     console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
-        // }
-        // lastPath.add({ x: event.center.x, y: event.center.y });
-        // socket.emit('update-draw', lastPathIndex, [event.center.x, event.center.y]);
+        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        if (lastPath === undefined) {
+            console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
+        }
+        lastPath.add({ x: event.center.x, y: event.center.y });
+
+        if (socketActive) {
+            socket.emit('update-draw', lastPathIndex, [event.center.x, event.center.y]);
+        }
     }
 
     /**
@@ -387,4 +395,4 @@ const Draw = (function(window, document, Hammer, paper) {
         undo,
         redo
     }
-})(window, document, Hammer, paper);
+})(window, document, Hammer, paper, io);
