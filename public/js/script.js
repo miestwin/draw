@@ -56,14 +56,19 @@ const Draw = (function(window, document, Hammer, paper, io) {
     socket.on('update-draw', function(index, point) {
         const lastPath = paper.project.activeLayer.children[index];
         if (lastPath === undefined) {
-            console.log(`ERROR with draw from socket. Path ${lastPathIndex} doesn't exist.`);
+            console.log(`ERROR with update draw from socket. Path ${lastPathIndex} doesn't exist.`);
         }
         lastPath.add({ x: point[0], y: point[1] });
         paper.view.update();
     });
 
-    socket.on('end-draw', function() {
-
+    socket.on('end-draw', function(index) {
+        const lastPath = paper.project.activeLayer.children[index];
+        if (lastPath === undefined) {
+            console.log(`ERROR with end draw from socket. Path ${lastPathIndex} doesn't exist.`);
+        }
+        lastPath.simplify(8);
+        setTimeout(() => refreshDownload(), 1);
     });
 
     socket.on('undo', function(index) {
@@ -252,10 +257,23 @@ const Draw = (function(window, document, Hammer, paper, io) {
      * @param {*} event 
      */
     function endDraw(event) {
-        path.simplify(8);
+        if (lastPathIndex === -1) {
+            return;
+        }
+
+        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        if (lastPath === undefined) {
+            console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
+        }
+
+        lastPath.simplify(8);
+
+        if (socketActive) {
+            socket.emit('end-draw', lastPathIndex, lastPath);
+            lastPathIndex = -1;
+        }
+
         setTimeout(() => refreshDownload(), 1);
-        console.log(path);
-        console.log(paper);
     }
 
     /**
