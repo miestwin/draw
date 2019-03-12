@@ -159,7 +159,47 @@ io.on('connection', (socket) => {
     });
 
     socket.on('end-draw', (index, path) => {
-        // end draw
+        // error during connection
+        if (err) {
+            throw err;
+        }
+
+        pool.connect((err, client, done) => {
+            // if error occurred during transaction, abort
+            const shouldAbort = (err) => {
+                if (err) {
+                    console.error('Error in transaction', err.stack);
+                    client.query('ROLLBACK', (err) => {
+                        if (err) {
+                            console.error('Error rolling back client', err.stack);
+                        }
+                        done();
+                    });
+                }
+                return !!err;
+            }
+
+            client.query('BEGIN', (err) => {
+                if (shouldAbort(err)) {
+                    return;
+                }
+
+                client.query('UPDATE paths SET json_string = $1 WHERE board = $2 and idx = $3', [JSON.stringify(path), board, index], (err, res) => {
+                    if (shouldAbort(err)) {
+                        return;
+                    }
+
+                    client.query('COMMIT', (err) => {
+                        if (err) {
+                            console.log('Error commiting transaction', err.stack);
+                        }
+
+                        socket.to(board).emit('end-draw', index);
+                        done();
+                    });
+                });
+            });
+        });
     });
 
     socket.on('undo', (index) => {

@@ -241,7 +241,7 @@ const Draw = (function(window, document, Hammer, paper, io) {
      * @param {*} event 
      */
     function draw(event) {
-        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        const lastPath = paper.project.activeLayer.children[lastPathIndex];
         if (lastPath === undefined) {
             console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
         }
@@ -261,7 +261,7 @@ const Draw = (function(window, document, Hammer, paper, io) {
             return;
         }
 
-        const lastPath = paper.project.layers[layerIndex].children[lastPathIndex];
+        const lastPath = paper.project.activeLayer.children[lastPathIndex];
         if (lastPath === undefined) {
             console.log(`ERROR with draw. Path ${lastPathIndex} doesn't exist.`);
         }
